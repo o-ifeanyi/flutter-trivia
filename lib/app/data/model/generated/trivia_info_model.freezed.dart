@@ -20,11 +20,10 @@ TriviaInfoModel _$TriviaInfoModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$TriviaInfoModel {
-  int get amount => throw _privateConstructorUsedError;
-  String get topic => throw _privateConstructorUsedError;
-  String get category => throw _privateConstructorUsedError;
-  TriviaType get type => throw _privateConstructorUsedError;
-  String get difficulty => throw _privateConstructorUsedError;
+  String? get amount => throw _privateConstructorUsedError;
+  TriviaCategory? get category => throw _privateConstructorUsedError;
+  TriviaType? get type => throw _privateConstructorUsedError;
+  String? get difficulty => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -39,11 +38,10 @@ abstract class $TriviaInfoModelCopyWith<$Res> {
       _$TriviaInfoModelCopyWithImpl<$Res, TriviaInfoModel>;
   @useResult
   $Res call(
-      {int amount,
-      String topic,
-      String category,
-      TriviaType type,
-      String difficulty});
+      {String? amount,
+      TriviaCategory? category,
+      TriviaType? type,
+      String? difficulty});
 }
 
 /// @nodoc
@@ -59,33 +57,28 @@ class _$TriviaInfoModelCopyWithImpl<$Res, $Val extends TriviaInfoModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? amount = null,
-    Object? topic = null,
-    Object? category = null,
-    Object? type = null,
-    Object? difficulty = null,
+    Object? amount = freezed,
+    Object? category = freezed,
+    Object? type = freezed,
+    Object? difficulty = freezed,
   }) {
     return _then(_value.copyWith(
-      amount: null == amount
+      amount: freezed == amount
           ? _value.amount
           : amount // ignore: cast_nullable_to_non_nullable
-              as int,
-      topic: null == topic
-          ? _value.topic
-          : topic // ignore: cast_nullable_to_non_nullable
-              as String,
-      category: null == category
+              as String?,
+      category: freezed == category
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
-              as String,
-      type: null == type
+              as TriviaCategory?,
+      type: freezed == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
-              as TriviaType,
-      difficulty: null == difficulty
+              as TriviaType?,
+      difficulty: freezed == difficulty
           ? _value.difficulty
           : difficulty // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ) as $Val);
   }
 }
@@ -99,11 +92,10 @@ abstract class _$$_TriviaInfoModelCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int amount,
-      String topic,
-      String category,
-      TriviaType type,
-      String difficulty});
+      {String? amount,
+      TriviaCategory? category,
+      TriviaType? type,
+      String? difficulty});
 }
 
 /// @nodoc
@@ -117,33 +109,28 @@ class __$$_TriviaInfoModelCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? amount = null,
-    Object? topic = null,
-    Object? category = null,
-    Object? type = null,
-    Object? difficulty = null,
+    Object? amount = freezed,
+    Object? category = freezed,
+    Object? type = freezed,
+    Object? difficulty = freezed,
   }) {
     return _then(_$_TriviaInfoModel(
-      amount: null == amount
+      amount: freezed == amount
           ? _value.amount
           : amount // ignore: cast_nullable_to_non_nullable
-              as int,
-      topic: null == topic
-          ? _value.topic
-          : topic // ignore: cast_nullable_to_non_nullable
-              as String,
-      category: null == category
+              as String?,
+      category: freezed == category
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
-              as String,
-      type: null == type
+              as TriviaCategory?,
+      type: freezed == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
-              as TriviaType,
-      difficulty: null == difficulty
+              as TriviaType?,
+      difficulty: freezed == difficulty
           ? _value.difficulty
           : difficulty // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ));
   }
 }
@@ -152,29 +139,23 @@ class __$$_TriviaInfoModelCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_TriviaInfoModel implements _TriviaInfoModel {
   const _$_TriviaInfoModel(
-      {required this.amount,
-      required this.topic,
-      required this.category,
-      required this.type,
-      required this.difficulty});
+      {this.amount, this.category, this.type, this.difficulty});
 
   factory _$_TriviaInfoModel.fromJson(Map<String, dynamic> json) =>
       _$$_TriviaInfoModelFromJson(json);
 
   @override
-  final int amount;
+  final String? amount;
   @override
-  final String topic;
+  final TriviaCategory? category;
   @override
-  final String category;
+  final TriviaType? type;
   @override
-  final TriviaType type;
-  @override
-  final String difficulty;
+  final String? difficulty;
 
   @override
   String toString() {
-    return 'TriviaInfoModel(amount: $amount, topic: $topic, category: $category, type: $type, difficulty: $difficulty)';
+    return 'TriviaInfoModel(amount: $amount, category: $category, type: $type, difficulty: $difficulty)';
   }
 
   @override
@@ -183,7 +164,6 @@ class _$_TriviaInfoModel implements _TriviaInfoModel {
         (other.runtimeType == runtimeType &&
             other is _$_TriviaInfoModel &&
             (identical(other.amount, amount) || other.amount == amount) &&
-            (identical(other.topic, topic) || other.topic == topic) &&
             (identical(other.category, category) ||
                 other.category == category) &&
             (identical(other.type, type) || other.type == type) &&
@@ -194,7 +174,7 @@ class _$_TriviaInfoModel implements _TriviaInfoModel {
   @JsonKey(ignore: true)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, amount, topic, category, type, difficulty);
+      Object.hash(runtimeType, amount, category, type, difficulty);
 
   @JsonKey(ignore: true)
   @override
@@ -212,25 +192,22 @@ class _$_TriviaInfoModel implements _TriviaInfoModel {
 
 abstract class _TriviaInfoModel implements TriviaInfoModel {
   const factory _TriviaInfoModel(
-      {required final int amount,
-      required final String topic,
-      required final String category,
-      required final TriviaType type,
-      required final String difficulty}) = _$_TriviaInfoModel;
+      {final String? amount,
+      final TriviaCategory? category,
+      final TriviaType? type,
+      final String? difficulty}) = _$_TriviaInfoModel;
 
   factory _TriviaInfoModel.fromJson(Map<String, dynamic> json) =
       _$_TriviaInfoModel.fromJson;
 
   @override
-  int get amount;
+  String? get amount;
   @override
-  String get topic;
+  TriviaCategory? get category;
   @override
-  String get category;
+  TriviaType? get type;
   @override
-  TriviaType get type;
-  @override
-  String get difficulty;
+  String? get difficulty;
   @override
   @JsonKey(ignore: true)
   _$$_TriviaInfoModelCopyWith<_$_TriviaInfoModel> get copyWith =>

@@ -1,273 +1,99 @@
-import 'dart:math';
-
+import 'package:ai_trivia/app/data/model/trivia_question_model.dart';
+import 'package:ai_trivia/app/presentation/provider/trivia_provider.dart';
+import 'package:ai_trivia/app/presentation/widgets/back_view.dart';
+import 'package:ai_trivia/app/presentation/widgets/stacked_card.dart';
 import 'package:ai_trivia/core/utils/config.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-enum Direction { left, right }
-
-class Card {
-  final int index;
-  final int zIndex;
-  final Direction direction;
-  final Color color;
-
-  Card(
-      {required this.index,
-      required this.zIndex,
-      required this.direction,
-      required this.color});
-}
-
-class TriviaScreen extends StatefulWidget {
+class TriviaScreen extends ConsumerStatefulWidget {
   const TriviaScreen({super.key});
 
   @override
-  State<TriviaScreen> createState() => _TriviaScreenState();
+  ConsumerState<TriviaScreen> createState() => _TriviaScreenState();
 }
 
-class _TriviaScreenState extends State<TriviaScreen> {
-  final cards = [
-    Card(index: 0, zIndex: 0, direction: Direction.left, color: Colors.green),
-    Card(index: 1, zIndex: 1, direction: Direction.left, color: Colors.brown),
-    Card(index: 2, zIndex: 2, direction: Direction.left, color: Colors.blue),
-    Card(index: 3, zIndex: 3, direction: Direction.left, color: Colors.red),
-    Card(index: 4, zIndex: 4, direction: Direction.left, color: Colors.indigo),
-    Card(index: 5, zIndex: 5, direction: Direction.left, color: Colors.orange),
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    final sorted = List<Card>.from(cards)
-      ..sort(((a, b) => b.zIndex.compareTo(a.zIndex)));
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: Config.contentPadding(v: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Padding(
-                padding: Config.contentPadding(h: 20),
-                child: Row(
-                  children: [
-                    Text('Browse', style: Config.textTheme.titleSmall),
-                    const Spacer(),
-                    const Circle(),
-                    Config.hGap20,
-                    const Circle(),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: sorted
-                      .map((e) => StackedCard(
-                            card: e,
-                            updateIndex: (swiped) {
-                              cards[swiped.index] = swiped;
-                              final right = cards
-                                  .where((e) => e.direction == Direction.right);
-                              final left = cards
-                                  .where((e) => e.direction == Direction.left);
-
-                              if ((swiped.direction == Direction.right &&
-                                      left.isNotEmpty) ||
-                                  (swiped.direction == Direction.left &&
-                                      right.isNotEmpty)) {
-                                for (int i = 0; i < cards.length; i++) {
-                                  switch (swiped.direction) {
-                                    case Direction.left:
-                                      if (right.any(
-                                          (e) => e.index == cards[i].index)) {
-                                        cards[i] = Card(
-                                            index: cards[i].index,
-                                            zIndex: cards[i].zIndex - 1,
-                                            direction: cards[i].direction,
-                                            color: cards[i].color);
-                                      } else {
-                                        cards[i] = Card(
-                                            index: cards[i].index,
-                                            zIndex: cards[i].zIndex + 1,
-                                            direction: cards[i].direction,
-                                            color: cards[i].color);
-                                      }
-                                    case Direction.right:
-                                      if (left.any(
-                                          (e) => e.index == cards[i].index)) {
-                                        cards[i] = Card(
-                                            index: cards[i].index,
-                                            zIndex: cards[i].zIndex - 1,
-                                            direction: cards[i].direction,
-                                            color: cards[i].color);
-                                      } else {
-                                        cards[i] = Card(
-                                            index: cards[i].index,
-                                            zIndex: cards[i].zIndex + 1,
-                                            direction: cards[i].direction,
-                                            color: cards[i].color);
-                                      }
-                                  }
-                                }
-                                setState(() {});
-                              }
-                            },
-                          ))
-                      .toList(),
-                ),
-              ),
-              Padding(
-                padding: Config.contentPadding(h: 40),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Circle(),
-                    Circle(),
-                    Circle(),
-                    Circle(),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class StackedCard extends StatefulWidget {
-  const StackedCard({
-    super.key,
-    required this.card,
-    required this.updateIndex,
-  });
-
-  final Card card;
-  final void Function(Card) updateIndex;
-
-  @override
-  State<StackedCard> createState() => _StackedCardState();
-}
-
-class _StackedCardState extends State<StackedCard>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _rotate;
-
-  bool isFlipped = false;
-  Offset offset = Offset.zero;
-  double height = 330;
-  double width = 260;
+class _TriviaScreenState extends ConsumerState<TriviaScreen> {
+  late List<TriviaQuestion> _questions;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 250));
-    _rotate = Tween<double>(begin: pi, end: 0.0).animate(_controller);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final i = widget.card.zIndex;
-    final isLeft = widget.card.direction == Direction.left;
-
-    final tiltAngle = (i * 3.5) * (3.14 / 180);
-    return Transform.translate(
-      offset: isLeft
-          ? Offset(offset.dx - (i * (30 - (i * 2))), 0)
-          : Offset(offset.dx + (i * (30 - (i * 2))), 0),
-      child: Transform.rotate(
-        angle: offset == Offset.zero
-            ? isLeft
-                ? -tiltAngle
-                : tiltAngle
-            : (offset.dx / 15) * (3.14 / 180),
-        child: GestureDetector(
-          onTap: () {
-            if (i != 0) return;
-            isFlipped = !isFlipped;
-            isFlipped ? _controller.forward() : _controller.reverse();
-          },
-          onHorizontalDragUpdate: (details) {
-            if (i != 0 || isFlipped) return;
-            setState(() {
-              offset = Offset(details.localPosition.dx - 260 / 2, 0);
-              height = 330 - min(40, offset.dx.abs());
-              width = 260 - min(40, offset.dx.abs());
-            });
-          },
-          onHorizontalDragEnd: (details) {
-            if (i != 0 || isFlipped) return;
-            final direction = offset.dx > 80
-                ? Direction.right
-                : offset.dx < -80
-                    ? Direction.left
-                    : widget.card.direction;
-
-            if (offset.dx.abs() > 80) {
-              widget.updateIndex(Card(
-                index: widget.card.index,
-                zIndex: widget.card.zIndex,
-                direction: direction,
-                color: widget.card.color,
-              ));
-            }
-            setState(() {
-              offset = Offset.zero;
-              height = 330;
-              width = 260;
-            });
-          },
-          child: AnimatedBuilder(
-            animation: _rotate,
-            builder: (context, child) {
-              return Transform(
-                transform: Matrix4.rotationY(_rotate.value)..setEntry(3, 0, 0),
-                alignment: Alignment.center,
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 250),
-                  height: isFlipped
-                      ? Config.height * 0.7
-                      : Config.y(height - (i * 25)),
-                  width: isFlipped ? Config.width : Config.x(width - (i * 25)),
-                  decoration: BoxDecoration(
-                    border:
-                        Border.all(color: colorScheme.onPrimary, width: 0.5),
-                    borderRadius: BorderRadius.circular(25),
-                    color: widget.card.color,
-                  ),
-                  child: Center(
-                    child: _rotate.value < (pi / 2)
-                        ? Text('Back', style: Config.textTheme.titleLarge)
-                        : Transform(
-                            transform: Matrix4.rotationY(_rotate.value),
-                            alignment: Alignment.center,
-                            child: Text('Front',
-                                style: Config.textTheme.titleSmall),
-                          ),
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
+    final trivia = ref.read(triviaProvider).trivia!;
+    _questions = List.generate(
+      trivia.questions.length,
+      (index) => trivia.questions[index].copyWith(
+        index: index,
+        zIndex: index,
+        direction: Direction.left,
       ),
     );
   }
-}
-
-class Circle extends StatelessWidget {
-  const Circle({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return CircleAvatar(
-      radius: 10,
-      backgroundColor: colorScheme.primary,
+    final sorted = List<TriviaQuestion>.from(_questions)
+      ..sort(((a, b) => b.zIndex!.compareTo(a.zIndex!)));
+    return Scaffold(
+      appBar: AppBar(),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: Stack(
+              alignment: Alignment.center,
+              children: sorted
+                  .map((question) => StackedCard(
+                        question: question,
+                        front: Center(
+                          child:
+                              Text('Front', style: Config.textTheme.titleSmall),
+                        ),
+                        back: BackView(question: question),
+                        updateIndex: (swiped) {
+                          _questions[swiped.index!] = swiped;
+                          final right = _questions
+                              .where((e) => e.direction == Direction.right);
+                          final left = _questions
+                              .where((e) => e.direction == Direction.left);
+
+                          if ((swiped.direction == Direction.right &&
+                                  left.isNotEmpty) ||
+                              (swiped.direction == Direction.left &&
+                                  right.isNotEmpty)) {
+                            for (int i = 0; i < _questions.length; i++) {
+                              switch (swiped.direction!) {
+                                case Direction.left:
+                                  if (right.any(
+                                      (e) => e.index == _questions[i].index)) {
+                                    _questions[i] = _questions[i].copyWith(
+                                        zIndex: _questions[i].zIndex! - 1);
+                                  } else {
+                                    _questions[i] = _questions[i].copyWith(
+                                        zIndex: _questions[i].zIndex! + 1);
+                                  }
+                                case Direction.right:
+                                  if (left.any(
+                                      (e) => e.index == _questions[i].index)) {
+                                    _questions[i] = _questions[i].copyWith(
+                                        zIndex: _questions[i].zIndex! - 1);
+                                  } else {
+                                    _questions[i] = _questions[i].copyWith(
+                                        zIndex: _questions[i].zIndex! + 1);
+                                  }
+                              }
+                            }
+                            setState(() {});
+                          }
+                        },
+                      ))
+                  .toList(),
+            ),
+          ),
+          Config.vGap20,
+        ],
+      ),
     );
   }
 }

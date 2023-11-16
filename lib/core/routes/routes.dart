@@ -1,6 +1,7 @@
 abstract class Routes {
   static String home = '/';
   static String trivia = 'trivia';
+  static String preTrivia = 'pre_trivia';
 }
 
 extension Name on String {

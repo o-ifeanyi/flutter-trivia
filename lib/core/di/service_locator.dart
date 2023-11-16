@@ -1,6 +1,8 @@
+import 'package:ai_trivia/app/data/trivia_repository_impl.dart';
+import 'package:ai_trivia/app/domain/trivia_repository.dart';
+import 'package:ai_trivia/app/presentation/provider/trivia_provider.dart';
 import 'package:ai_trivia/core/services/dialog_service/dialog_service.dart';
 import 'package:ai_trivia/core/services/dialog_service/dialog_service_impl.dart';
-import 'package:ai_trivia/core/services/network_service/interceptor.dart';
 import 'package:ai_trivia/core/services/network_service/network_service.dart';
 import 'package:ai_trivia/core/services/network_service/network_service_impl.dart';
 import 'package:dio/dio.dart';
@@ -14,23 +16,21 @@ Future<void> initServiceLocator() async {
 
   const timeout = Duration(minutes: 1);
   final Dio dio = Dio(BaseOptions(
-    baseUrl: 'https://clownfish-app-5uixy.ondigitalocean.app',
+    baseUrl: 'https://opentdb.com',
     receiveTimeout: timeout,
     connectTimeout: timeout,
     sendTimeout: timeout,
     contentType: 'application/json',
   ));
-  final interceptor = AuthInterceptor(preferences: sharedPreference);
-  dio.interceptors.add(interceptor);
+  // final interceptor = AuthInterceptor(preferences: sharedPreference);
+  // dio.interceptors.add(interceptor);
 
-  // // Auth Provider
-  // sl.registerFactory(
-  //     () => AuthProvider(authRepository: sl(), dialogService: sl()));
-  // // Auth Repository
-  // sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(
-  //       networkService: sl(),
-  //       preferences: sl(),
-  //     ));
+  // Trivia Provider
+  sl.registerFactory(
+      () => TriviaProvider(triviaRepository: sl(), dialogService: sl()));
+  // Auth Repository
+  sl.registerLazySingleton<TriviaRepository>(
+      () => TriviaRepositoryImpl(networkService: sl()));
 
   // Externals
   sl.registerLazySingleton<SharedPreferences>(() => sharedPreference);

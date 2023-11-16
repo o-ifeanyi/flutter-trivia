@@ -20,8 +20,7 @@ TriviaModel _$TriviaModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$TriviaModel {
-  String get title => throw _privateConstructorUsedError;
-  List<QuestionModel> get questions => throw _privateConstructorUsedError;
+  List<TriviaQuestion> get questions => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
   TriviaInfoModel? get triviaInfo => throw _privateConstructorUsedError;
 
@@ -38,8 +37,7 @@ abstract class $TriviaModelCopyWith<$Res> {
       _$TriviaModelCopyWithImpl<$Res, TriviaModel>;
   @useResult
   $Res call(
-      {String title,
-      List<QuestionModel> questions,
+      {List<TriviaQuestion> questions,
       DateTime? createdAt,
       TriviaInfoModel? triviaInfo});
 
@@ -59,20 +57,15 @@ class _$TriviaModelCopyWithImpl<$Res, $Val extends TriviaModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? title = null,
     Object? questions = null,
     Object? createdAt = freezed,
     Object? triviaInfo = freezed,
   }) {
     return _then(_value.copyWith(
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
       questions: null == questions
           ? _value.questions
           : questions // ignore: cast_nullable_to_non_nullable
-              as List<QuestionModel>,
+              as List<TriviaQuestion>,
       createdAt: freezed == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -106,8 +99,7 @@ abstract class _$$_TriviaModelCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String title,
-      List<QuestionModel> questions,
+      {List<TriviaQuestion> questions,
       DateTime? createdAt,
       TriviaInfoModel? triviaInfo});
 
@@ -126,20 +118,15 @@ class __$$_TriviaModelCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? title = null,
     Object? questions = null,
     Object? createdAt = freezed,
     Object? triviaInfo = freezed,
   }) {
     return _then(_$_TriviaModel(
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
       questions: null == questions
           ? _value._questions
           : questions // ignore: cast_nullable_to_non_nullable
-              as List<QuestionModel>,
+              as List<TriviaQuestion>,
       createdAt: freezed == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -156,8 +143,7 @@ class __$$_TriviaModelCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_TriviaModel implements _TriviaModel {
   const _$_TriviaModel(
-      {required this.title,
-      required final List<QuestionModel> questions,
+      {required final List<TriviaQuestion> questions,
       this.createdAt,
       this.triviaInfo})
       : _questions = questions;
@@ -165,11 +151,9 @@ class _$_TriviaModel implements _TriviaModel {
   factory _$_TriviaModel.fromJson(Map<String, dynamic> json) =>
       _$$_TriviaModelFromJson(json);
 
+  final List<TriviaQuestion> _questions;
   @override
-  final String title;
-  final List<QuestionModel> _questions;
-  @override
-  List<QuestionModel> get questions {
+  List<TriviaQuestion> get questions {
     if (_questions is EqualUnmodifiableListView) return _questions;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_questions);
@@ -182,7 +166,7 @@ class _$_TriviaModel implements _TriviaModel {
 
   @override
   String toString() {
-    return 'TriviaModel(title: $title, questions: $questions, createdAt: $createdAt, triviaInfo: $triviaInfo)';
+    return 'TriviaModel(questions: $questions, createdAt: $createdAt, triviaInfo: $triviaInfo)';
   }
 
   @override
@@ -190,7 +174,6 @@ class _$_TriviaModel implements _TriviaModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_TriviaModel &&
-            (identical(other.title, title) || other.title == title) &&
             const DeepCollectionEquality()
                 .equals(other._questions, _questions) &&
             (identical(other.createdAt, createdAt) ||
@@ -201,7 +184,7 @@ class _$_TriviaModel implements _TriviaModel {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, title,
+  int get hashCode => Object.hash(runtimeType,
       const DeepCollectionEquality().hash(_questions), createdAt, triviaInfo);
 
   @JsonKey(ignore: true)
@@ -220,8 +203,7 @@ class _$_TriviaModel implements _TriviaModel {
 
 abstract class _TriviaModel implements TriviaModel {
   const factory _TriviaModel(
-      {required final String title,
-      required final List<QuestionModel> questions,
+      {required final List<TriviaQuestion> questions,
       final DateTime? createdAt,
       final TriviaInfoModel? triviaInfo}) = _$_TriviaModel;
 
@@ -229,9 +211,7 @@ abstract class _TriviaModel implements TriviaModel {
       _$_TriviaModel.fromJson;
 
   @override
-  String get title;
-  @override
-  List<QuestionModel> get questions;
+  List<TriviaQuestion> get questions;
   @override
   DateTime? get createdAt;
   @override

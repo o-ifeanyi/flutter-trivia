@@ -37,9 +37,7 @@ final class NetworkServiceImpl implements NetworkService {
           data: data,
           queryParameters: queryParameters,
         )
-        .onError<DioException>(
-          (error, stackTrace) => throw CustomError.message(
-              error.response?.statusMessage ?? 'An error occured'),
-        );
+        .onError<DioException>((error, stackTrace) => throw CustomError.message(
+            error.response?.statusMessage ?? 'An error occured'));
   }
 }

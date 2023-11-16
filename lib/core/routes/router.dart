@@ -1,4 +1,5 @@
 import 'package:ai_trivia/app/presentation/screens/home_screen.dart';
+import 'package:ai_trivia/app/presentation/screens/pre_trivia_screen.dart';
 import 'package:ai_trivia/app/presentation/screens/trivia_screen.dart';
 import 'package:ai_trivia/core/routes/routes.dart';
 import 'package:ai_trivia/core/utils/config.dart';
@@ -39,6 +40,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: Routes.home,
         screen: const HomeScreen(),
         routes: [
+          route(path: Routes.preTrivia, screen: const PreTriviaScreen()),
           route(path: Routes.trivia, screen: const TriviaScreen()),
         ],
       ),

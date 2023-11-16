@@ -8,9 +8,8 @@ part of '../trivia_model.dart';
 
 _$_TriviaModel _$$_TriviaModelFromJson(Map<String, dynamic> json) =>
     _$_TriviaModel(
-      title: json['title'] as String,
       questions: (json['questions'] as List<dynamic>)
-          .map((e) => QuestionModel.fromJson(e as Map<String, dynamic>))
+          .map((e) => TriviaQuestion.fromJson(e as Map<String, dynamic>))
           .toList(),
       createdAt: json['created_at'] == null
           ? null
@@ -23,7 +22,6 @@ _$_TriviaModel _$$_TriviaModelFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$_TriviaModelToJson(_$_TriviaModel instance) =>
     <String, dynamic>{
-      'title': instance.title,
       'questions': instance.questions.map((e) => e.toJson()).toList(),
       'created_at': instance.createdAt?.toIso8601String(),
       'trivia_info': instance.triviaInfo?.toJson(),
